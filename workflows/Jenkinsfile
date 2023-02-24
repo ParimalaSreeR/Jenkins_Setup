@@ -1,22 +1,23 @@
-
 pipeline {
     agent any
 
     stages {
+        stage('checkout') {
+            steps {
+                checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: 'b1a0fad1-4560-4122-abef-130cfc9bdfd4', url: 'https://github.com/ParimalaSreeR/Jenkins_Setup.git']])
+            }
+        }
         stage('Build') {
             steps {
-                echo 'Building..'
+                bat 'javac Hello.java'
+                bat 'java Hello'
             }
         }
-        stage('Test') {
+        stage('Testing') {
             steps {
-                echo 'Testing..'
-            }
-        }
-        stage('Deploy') {
-            steps {
-                echo 'Deploying...., This is Demo'
+                echo "This job has tested"
             }
         }
     }
+    
 }
