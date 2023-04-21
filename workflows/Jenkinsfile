@@ -19,29 +19,21 @@ pipeline {
             }
         }
         
+        stages {
         stage('Clone repository') {
             steps {
                 git branch: 'main', url: 'https://github.com/ParimalaSreeR/emptyrepo.git'
             }
         }
-        
         stage('Check file') {
             steps {
                 sh 'ls -l'
                 sh 'if [ -f tiaa.json ]; then echo "File exists"; else echo "File does not exist"; exit 1; fi'
                 sh 'if [ ! -s tiaa.json ]; then echo "File is empty"; exit 1; fi'
-                script {
-                    def jsonText = new File('tiaa.json').text
-                    try {
-                        def json = new JsonSlurper().parseText(jsonText)
-                        echo "File is valid JSON"
-                    } catch (Exception e) {
-                        echo "File is not valid JSON"
-                        throw e
-                    }
-                }
+                sh 'if [ "$(cat tiaa.json | python -m json.tool 2>&1 >/dev/null)" != "" ]; then echo "File is not valid JSON"; exit 1; fi'
             }
         }
+    }
     }
     
 }
