@@ -19,7 +19,6 @@ pipeline {
             }
         }
         
-        stages {
         stage('Clone repository') {
             steps {
                 git branch: 'main', url: 'https://github.com/ParimalaSreeR/emptyrepo.git'
@@ -33,7 +32,7 @@ pipeline {
                 sh 'if [ "$(cat tiaa.json | python -m json.tool 2>&1 >/dev/null)" != "" ]; then echo "File is not valid JSON"; exit 1; fi'
             }
         }
-    }
+    
     }
     
 }
